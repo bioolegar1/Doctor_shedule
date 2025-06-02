@@ -13,6 +13,7 @@
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.12",
+    "better-auth": "^1.2.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.5.0",
@@ -23,9 +24,9 @@
     "pg": "^8.16.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.56.4",
+    "react-hook-form": "^7.57.0",
     "tailwind-merge": "^3.3.0",
-    "zod": "^3.26.0-canary.20250527T212543"
+    "zod": "^3.25.48"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
