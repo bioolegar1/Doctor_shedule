@@ -22,6 +22,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { authClient } from "@/lib/auth-client";
 
 const registerSchema = z.object({
   name: z.string().trim().min(1, { message: "Nome é obrigatório" }).max(50),
@@ -47,8 +48,20 @@ const SignUpForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof registerSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof registerSchema>) {
+    try {
+      await authClient.signUp.email({
+        email: values.email,
+        password: values.password,
+        name: values.name,
+        callbackURL: "/dashboard",
+      });
+      alert("Conta criada com sucesso!");
+    } catch (e: any) {
+      // Mostra o erro no console e em um alerta para facilitar o debug
+      console.error("Erro ao criar conta:", e);
+      alert("Erro ao criar conta: " + (e?.message || JSON.stringify(e)));
+    }
   }
 
   return (
