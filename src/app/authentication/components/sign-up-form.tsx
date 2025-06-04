@@ -23,6 +23,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { authClient } from "@/lib/auth-client";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const registerSchema = z.object({
   name: z.string().trim().min(1, { message: "Nome é obrigatório" }).max(50),
@@ -38,6 +40,7 @@ const registerSchema = z.object({
 });
 
 const SignUpForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -49,19 +52,18 @@ const SignUpForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
-    try {
-      await authClient.signUp.email({
+    await authClient.signUp.email(
+      {
         email: values.email,
         password: values.password,
         name: values.name,
-        callbackURL: "/dashboard",
-      });
-      alert("Conta criada com sucesso!");
-    } catch (e: any) {
-      // Mostra o erro no console e em um alerta para facilitar o debug
-      console.error("Erro ao criar conta:", e);
-      alert("Erro ao criar conta: " + (e?.message || JSON.stringify(e)));
-    }
+      },
+      {
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
+      },
+    );
   }
 
   return (
@@ -138,8 +140,16 @@ const SignUpForm = () => {
             />
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full">
-              Criar Conta
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Criar Conta"
+              )}
             </Button>
           </CardFooter>
         </form>
